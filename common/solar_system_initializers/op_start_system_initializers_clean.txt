@@ -1,0 +1,83 @@
+op_start_system_initializer = {
+	class = "sc_g"
+	name = "NAME_OP_Start_System"
+	
+	usage = custom_empire
+	usage_odds = {
+		base = 0
+		modifier = {
+			add = 1000
+			has_country_flag = op_start_system_selected
+		}
+	}
+	
+	flags = { empire_home_system custom_start_system }
+	
+	planet = {
+		name = "NAME_OP_Star"
+		class = star
+		orbit_distance = 0
+		orbit_angle = 1
+		size = 30
+	}
+	
+	planet = {
+		name = "NAME_OP_Homeworld"
+		class = ideal_planet_class
+		orbit_distance = 40
+		orbit_angle = 60
+		size = 25
+		
+		init_effect = {
+			prevent_anomaly = yes
+		}
+	}
+	
+	planet = {
+		name = "NAME_OP_Inner_Planet"
+		class = ideal_planet_class
+		orbit_distance = 20
+		orbit_angle = 130
+		size = 16
+		
+		init_effect = {
+			prevent_anomaly = yes
+		}
+	}
+	
+	planet = {
+		name = "NAME_OP_Outer_Planet"
+		class = ideal_planet_class
+		orbit_distance = 30
+		orbit_angle = 220
+		size = 16
+		
+		init_effect = {
+			prevent_anomaly = yes
+		}
+	}
+	
+	planet = {
+		name = "NAME_OP_Far_Planet"
+		class = ideal_planet_class
+		orbit_distance = 50
+		orbit_angle = 40
+		size = 16
+		
+		init_effect = {
+			prevent_anomaly = yes
+		}
+	}
+	
+	planet = {
+		name = "NAME_OP_Edge_Paradise"
+		class = "pc_gaia"
+		orbit_distance = 60
+		orbit_angle = 100
+		size = 18
+		
+		init_effect = {
+			prevent_anomaly = yes
+		}
+	}
+}

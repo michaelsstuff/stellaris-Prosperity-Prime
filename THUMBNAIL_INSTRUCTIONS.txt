@@ -1,0 +1,15 @@
+To complete the mod, you need to create a thumbnail.png file:
+
+1. Create a 128x128 pixel image representing your OP Start System
+2. The image should ideally show a star with multiple planets to represent your powerful starting system
+3. Add visual elements that indicate resources or power
+4. Save it as "thumbnail.png" in this directory (next to this text file)
+5. The image will appear in the mod launcher when properly placed
+
+Suggested elements to include:
+- A bright yellow/orange G-class star (Solar Prime)
+- Multiple planets of different colors (representing the various planet types)
+- Sparkles or glowing elements to represent resources
+- Visual indicators of prosperity and abundance
+
+Once you've created the thumbnail, you can delete this instruction file.

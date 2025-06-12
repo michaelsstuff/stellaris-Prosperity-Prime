@@ -1,0 +1,18 @@
+# OP Start System game rules
+# This file defines the game rule that allows the system to be selected in the game setup
+
+op_system_start = {
+	name = "game_rule_op_system_start"
+	desc = "game_rule_op_system_start_desc"
+	category = "game_rules_new_game"
+	
+	default = {
+		name = no
+		text = disabled
+	}
+	
+	option = {
+		name = yes
+		text = enabled
+	}
+}

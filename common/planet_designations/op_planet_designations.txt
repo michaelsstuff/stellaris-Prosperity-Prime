@@ -1,0 +1,152 @@
+# Planet Designations for OP Start System
+# These designations help guide Phoenix 4.0 zone AI decisions
+
+op_energy_world = {
+	name = "op_energy_world"
+	icon = GFX_planet_type_energy
+	
+	building_slots = 0
+	district_slots = 0
+	
+	resources = {
+		category = planet_designations_upkeep
+	}
+	
+	planet_modifier = {
+		job_technician_add = 3
+		planet_technician_produces_mult = 0.20
+		district_generator_max = 6
+	}
+	
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = { has_country_flag = op_start_system_selected }
+		}
+		modifier = {
+			planet_jobs_energy_produces_mult = 0.15
+		}
+	}
+	
+	# AI will favor this planet for energy production
+	ai_weight = {
+		weight = 10
+		modifier = {
+			factor = 10
+			has_modifier = planet_energy_bonus
+		}
+	}
+}
+
+op_mining_world = {
+	name = "op_mining_world"
+	icon = GFX_planet_type_mining
+	
+	building_slots = 0
+	district_slots = 0
+	
+	resources = {
+		category = planet_designations_upkeep
+	}
+	
+	planet_modifier = {
+		job_miner_add = 3
+		planet_miners_produces_mult = 0.20
+		district_mining_max = 6
+	}
+	
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = { has_country_flag = op_start_system_selected }
+		}
+		modifier = {
+			planet_jobs_minerals_produces_mult = 0.15
+		}
+	}
+	
+	# AI will favor this planet for mineral production
+	ai_weight = {
+		weight = 10
+		modifier = {
+			factor = 10
+			has_modifier = planet_mining_bonus
+		}
+	}
+}
+
+op_farming_world = {
+	name = "op_farming_world"
+	icon = GFX_planet_type_farming
+	
+	building_slots = 0
+	district_slots = 0
+	
+	resources = {
+		category = planet_designations_upkeep
+	}
+	
+	planet_modifier = {
+		job_farmer_add = 3
+		planet_farmers_produces_mult = 0.20
+		district_farming_max = 6
+	}
+	
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = { has_country_flag = op_start_system_selected }
+		}
+		modifier = {
+			planet_jobs_food_produces_mult = 0.15
+		}
+	}
+	
+	# AI will favor this planet for food production
+	ai_weight = {
+		weight = 10
+		modifier = {
+			factor = 10
+			has_modifier = planet_farming_bonus
+		}
+	}
+}
+
+op_research_world = {
+	name = "op_research_world"
+	icon = GFX_planet_type_research
+	
+	building_slots = 0
+	district_slots = 0
+	
+	resources = {
+		category = planet_designations_upkeep
+	}
+	
+	planet_modifier = {
+		job_researcher_add = 2
+		job_culture_worker_add = 1
+		planet_researchers_produces_mult = 0.15
+	}
+	
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = { has_country_flag = op_start_system_selected }
+		}
+		modifier = {
+			planet_jobs_physics_research_produces_mult = 0.10
+			planet_jobs_society_research_produces_mult = 0.10
+			planet_jobs_engineering_research_produces_mult = 0.10
+		}
+	}
+	
+	# AI will favor this planet for research
+	ai_weight = {
+		weight = 10
+		modifier = {
+			factor = 10
+			has_modifier = planet_research_bonus
+		}
+	}
+}

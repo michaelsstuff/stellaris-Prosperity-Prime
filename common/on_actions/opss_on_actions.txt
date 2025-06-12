@@ -1,0 +1,26 @@
+# OP Start System On-Action Events
+# These events handle the game rule selection
+
+on_game_start_country = {
+	events = {
+		opss_setup.1
+	}
+}
+
+# Set flag when game rule is enabled
+country_event = {
+	id = opss_setup.1
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		has_game_rule = {
+			rule = op_system_start
+			value = yes
+		}
+	}
+	
+	immediate = {
+		set_country_flag = op_start_system_selected
+	}
+}

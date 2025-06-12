@@ -1,0 +1,37 @@
+# OP Start System Planet Modifiers
+# These modifiers provide specialization bonuses to planets for Phoenix 4.0
+
+planet_energy_bonus = {
+	# Very strong energy bonuses to encourage energy specialization
+	planet_technician_produces_mult = 0.50
+	district_generator_max = 5
+	job_technician_add = 3
+	planet_jobs_energy_produces_mult = 0.25
+}
+
+planet_mining_bonus = {
+	# Very strong mining bonuses to encourage mining specialization
+	planet_miners_produces_mult = 0.50
+	district_mining_max = 5
+	job_miner_add = 3
+	planet_jobs_minerals_produces_mult = 0.25
+}
+
+planet_farming_bonus = {
+	# Very strong farming bonuses to encourage farming specialization
+	planet_farmers_produces_mult = 0.50
+	district_farming_max = 5
+	job_farmer_add = 3
+	planet_jobs_food_produces_mult = 0.25
+}
+
+planet_research_bonus = {
+	# Production bonuses that encourage research specialization
+	planet_researchers_produces_mult = 0.15
+	job_researcher_add = 1
+	job_culture_worker_add = 1
+	# Economic bonuses that make research more attractive
+	planet_jobs_physics_research_produces_mult = 0.1
+	planet_jobs_society_research_produces_mult = 0.1
+	planet_jobs_engineering_research_produces_mult = 0.1
+}

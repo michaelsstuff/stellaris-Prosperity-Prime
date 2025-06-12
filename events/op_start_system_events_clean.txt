@@ -1,0 +1,45 @@
+namespace = opss
+
+# This event shows a notification when the mod is loaded
+country_event = {
+	id = opss.0
+	hide_window = yes
+	
+	trigger = {
+		NOT = { has_global_flag = opss_mod_loaded }
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		set_global_flag = opss_mod_loaded
+		country_event = { id = opss.2 }
+	}
+}
+
+# This is triggered when the player starts with the OP start system
+country_event = {
+	id = opss.1
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		# Just show notification - advantage comes from multiple large habitable planets
+		country_event = { id = opss.2 }
+	}
+}
+
+# This event displays a notification when the mod is loaded
+country_event = {
+	id = opss.2
+	title = "opss.2.title"
+	desc = "opss.2.desc"
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "opss.2.ok"
+	}
+}
