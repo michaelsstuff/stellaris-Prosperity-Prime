@@ -22,70 +22,38 @@ op_start_system_initializer = {
 	}
 	
 	planet = {
-		name = "NAME_OP_Homeworld"
-		class = ideal_planet_class
-		orbit_distance = 40
-		orbit_angle = 60
-		size = 25
-		
-		init_effect = {
-			prevent_anomaly = yes
-		}
-	}
-	
-	planet = {
-		name = "NAME_OP_Energy_Prime"
-		class = ideal_planet_class
-		orbit_distance = 20
-		orbit_angle = 130
-		size = 18
-		
-		init_effect = {
-			prevent_anomaly = yes
-			add_modifier = {
-				modifier = planet_energy_bonus
-				days = -1
-			}
-		}
-	}
-	
-	planet = {
-		name = "NAME_OP_Minerals_Core"
-		class = ideal_planet_class
+		name = "NAME_OP_Molten_Forge"
+		class = pc_molten
 		orbit_distance = 30
-		orbit_angle = 220
-		size = 18
+		orbit_angle = 45
+		size = 15
 		
 		init_effect = {
 			prevent_anomaly = yes
-			add_modifier = {
-				modifier = planet_mining_bonus
-				days = -1
-			}
+			add_deposit = d_volatile_motes_2
 		}
 	}
 	
 	planet = {
-		name = "NAME_OP_Farming_Haven"
-		class = ideal_planet_class
-		orbit_distance = 50
-		orbit_angle = 40
-		size = 18
+		name = "NAME_OP_Barren_Rock"
+		class = pc_barren
+		orbit_distance = 25
+		orbit_angle = 120
+		size = 14
 		
 		init_effect = {
 			prevent_anomaly = yes
-			add_modifier = {
-				modifier = planet_farming_bonus
-				days = -1
-			}
+			add_deposit = d_minerals_3
+			add_deposit = d_energy_3
+			add_deposit = d_alloys_1
 		}
 	}
 	
 	planet = {
 		name = "NAME_OP_Paradise_World"
 		class = ideal_planet_class
-		orbit_distance = 60
-		orbit_angle = 100
+		orbit_distance = 30
+		orbit_angle = 200
 		size = 20
 		
 		init_effect = {
@@ -94,6 +62,87 @@ op_start_system_initializer = {
 				modifier = planet_research_bonus
 				days = -1
 			}
+		}
+		
+		moon = {
+			name = "NAME_OP_Farming_Haven"
+			class = ideal_planet_class
+			size = 12
+			orbit_distance = 15
+			orbit_angle = 180
+			
+			init_effect = {
+				prevent_anomaly = yes
+				add_modifier = {
+					modifier = planet_farming_bonus
+					days = -1
+				}
+			}
+		}
+	}
+	
+	# Asteroid belt
+	change_orbit = 35
+	asteroid_belt = {
+		type = rocky_asteroid_belt
+		radius = 120
+	}
+	
+	planet = {
+		name = "NAME_OP_Homeworld"
+		class = ideal_planet_class
+		orbit_distance = 40
+		orbit_angle = 280
+		size = 25
+		starting_planet = yes
+		
+		init_effect = {
+			prevent_anomaly = yes
+		}
+		
+		moon = {
+			name = "NAME_OP_Energy_Prime"
+			class = ideal_planet_class
+			size = 12
+			orbit_distance = 10
+			orbit_angle = 45
+			
+			init_effect = {
+				prevent_anomaly = yes
+				add_modifier = {
+					modifier = planet_energy_bonus
+					days = -1
+				}
+			}
+		}
+		
+		moon = {
+			name = "NAME_OP_Minerals_Core"
+			class = ideal_planet_class
+			size = 12
+			orbit_distance = 15
+			orbit_angle = 135
+			
+			init_effect = {
+				prevent_anomaly = yes
+				add_modifier = {
+					modifier = planet_mining_bonus
+					days = -1
+				}
+			}
+		}
+	}
+	
+	planet = {
+		name = "NAME_OP_Gas_Harvester"
+		class = pc_gas_giant
+		orbit_distance = 50
+		orbit_angle = 60
+		size = 30
+		
+		init_effect = {
+			prevent_anomaly = yes
+			add_deposit = d_exotic_gases_2
 		}
 	}
 }

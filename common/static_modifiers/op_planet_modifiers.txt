@@ -7,6 +7,14 @@ planet_energy_bonus = {
 	district_generator_max = 5
 	job_technician_add = 3
 	planet_jobs_energy_produces_mult = 0.25
+	
+	# Strong penalties to discourage other district types
+	district_farming_max = -8
+	district_mining_max = -5
+	planet_farmers_produces_mult = -0.60
+	planet_miners_produces_mult = -0.40
+	planet_jobs_food_produces_mult = -0.40
+	planet_jobs_minerals_produces_mult = -0.30
 }
 
 planet_mining_bonus = {
@@ -15,6 +23,13 @@ planet_mining_bonus = {
 	district_mining_max = 5
 	job_miner_add = 3
 	planet_jobs_minerals_produces_mult = 0.25
+	
+	# Strong penalties to discourage other district types for better specialization
+	district_farming_max = -10
+	district_generator_max = -5
+	planet_farmers_produces_mult = -0.75
+	planet_technician_produces_mult = -0.50
+	planet_jobs_food_produces_mult = -0.50
 }
 
 planet_farming_bonus = {
@@ -23,6 +38,14 @@ planet_farming_bonus = {
 	district_farming_max = 5
 	job_farmer_add = 3
 	planet_jobs_food_produces_mult = 0.25
+	
+	# Strong penalties to discourage other district types
+	district_mining_max = -8
+	district_generator_max = -5
+	planet_miners_produces_mult = -0.60
+	planet_technician_produces_mult = -0.40
+	planet_jobs_minerals_produces_mult = -0.40
+	planet_jobs_energy_produces_mult = -0.30
 }
 
 planet_research_bonus = {
@@ -34,4 +57,12 @@ planet_research_bonus = {
 	planet_jobs_physics_research_produces_mult = 0.1
 	planet_jobs_society_research_produces_mult = 0.1
 	planet_jobs_engineering_research_produces_mult = 0.1
+	
+	# Moderate penalties to discourage resource districts while allowing flexibility
+	district_farming_max = -3
+	district_mining_max = -3
+	district_generator_max = -3
+	planet_farmers_produces_mult = -0.25
+	planet_miners_produces_mult = -0.25
+	planet_technician_produces_mult = -0.25
 }
