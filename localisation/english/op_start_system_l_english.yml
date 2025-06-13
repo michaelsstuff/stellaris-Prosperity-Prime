@@ -1,5 +1,9 @@
 ﻿l_english:
 
+# System Initializer Dropdown Names
+op_start_system_initializer_NAME:0 "Prosperity Prime System"
+op_start_system_initializer_DESC:0 "An overpowered starting system with multiple specialized worlds, strategic resources, and a rich asteroid belt perfect for rapid empire expansion."
+
 # System Names
 NAME_OP_Start_System:0 "Prosperity Prime"
 NAME_OP_Star:0 "Solar Prime"
@@ -25,6 +29,12 @@ NAME_OP_Paradise_World:0 "Paradise World"
 NAME_OP_Molten_Forge:0 "Molten Forge"
 NAME_OP_Gas_Harvester:0 "Gas Harvester"
 NAME_OP_Barren_Rock:0 "Barren Rock"
+
+# Asteroid belt asteroids
+NAME_OP_Asteroid_Minerals:0 "Mineral Cache"
+NAME_OP_Asteroid_Energy:0 "Energy Node"
+NAME_OP_Asteroid_Crystals:0 "Crystal Deposit"
+NAME_OP_Asteroid_Alloys:0 "Alloy Fragment"
 
 # Game Rules
 game_rule_op_system_start:0 "OP Start System"
