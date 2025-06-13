@@ -1,0 +1,58 @@
+l_german:
+
+# System Initializer Dropdown Names
+op_start_system_initializer_NAME:0 "Wohlstands-Prime-System"
+op_start_system_initializer_DESC:0 "Ein übermächtiges Startsystem mit mehreren spezialisierten Welten, strategischen Ressourcen und einem reichen Asteroidengürtel - perfekt für eine rasche Reichsexpansion."
+
+# System Names
+NAME_OP_Start_System:0 "Wohlstands-Prime"
+NAME_OP_Star:0 "Solar Prime"
+NAME_OP_Homeworld:0 "Neues Eden"
+NAME_OP_Moon:0 "Mondbastion"
+NAME_OP_Inner_Planet:0 "Energie-Prime"
+NAME_OP_Asteroid_Belt:0 "Goldener Schleier"
+NAME_OP_Rich_Asteroid:0 "Bergarbeiterschatz"
+NAME_OP_Crystal_Asteroid:0 "Kristallspeicher"
+NAME_OP_Outer_Planet:0 "Mineralien-Kern"
+NAME_OP_Gas_Giant:0 "Reichtumssphäre"
+NAME_OP_Gas_Moon:0 "Mote-Gießerei"
+NAME_OP_Crystal_Moon:0 "Crystallus"
+NAME_OP_Mote_Moon:0 "Gasreservoir"
+NAME_OP_Far_Planet:0 "Landwirtschaftsparadies"
+NAME_OP_Edge_Paradise:0 "Paradieswelt"
+
+# New planet names for the updated system
+NAME_OP_Energy_Prime:0 "Energie-Prime"
+NAME_OP_Minerals_Core:0 "Mineralien-Kern"
+NAME_OP_Farming_Haven:0 "Landwirtschaftsparadies"
+NAME_OP_Paradise_World:0 "Paradieswelt"
+NAME_OP_Molten_Forge:0 "Schmelzende Schmiede"
+NAME_OP_Gas_Harvester:0 "Gas-Sammler"
+NAME_OP_Barren_Rock:0 "Öder Fels"
+
+# Asteroid belt asteroids
+NAME_OP_Asteroid_Minerals:0 "Mineralienvorrat"
+NAME_OP_Asteroid_Energy:0 "Energieknoten"
+NAME_OP_Asteroid_Crystals:0 "Kristalllagerstätte"
+NAME_OP_Asteroid_Alloys:0 "Legierungsfragment"
+
+# Game Rules
+game_rule_op_system_start:0 "OP-Startsystem"
+game_rule_op_system_start_desc:0 "Ermöglicht es, das 'Wohlstands-Prime'-System als Startsystem zu wählen, welches mehrere spezialisierte Welten bietet: eine große Heimatwelt (Größe 25) mit 2 spezialisierten Monden, eine Paradieswelt (Größe 20) mit Landwirtschaftsmond sowie strategische Ressourcenplaneten für Volatile Motes und Exotische Gase. Alle kolonisierbaren Planeten haben mächtige Spezialisierungsboni für Stellaris 4.0's Zonensystem."
+
+# Notification Event
+opss.2.title:0 "OP-Startsystem-Mod geladen"
+opss.2.desc:0 "Sie haben erfolgreich die OP-Startsystem-Mod geladen. Ihr Startsystem 'Wohlstands-Prime' wartet mit mehreren spezialisierten Welten: Energie-Prime und Mineralien-Kern Monde um Ihre Heimatwelt, Paradieswelt mit Landwirtschaftsparadies-Mond sowie strategische Ressourcenplaneten. Nutzen Sie das Zonensystem, um ihre Spezialisierungsboni zu maximieren!"
+opss.2.ok:0 "Ausgezeichnet!"
+
+# Planet Modifiers
+planet_energy_bonus:0 "Energie-Spezialisierung"
+planet_mining_bonus:0 "Bergbau-Spezialisierung"
+planet_farming_bonus:0 "Landwirtschafts-Spezialisierung"
+planet_research_bonus:0 "Forschungs-Spezialisierung"
+
+# Planet Designations
+op_energy_world:0 "Energie-spezialisierte Welt"
+op_mining_world:0 "Bergbau-spezialisierte Welt"
+op_farming_world:0 "Landwirtschafts-spezialisierte Welt"
+op_research_world:0 "Forschungs-spezialisierte Welt"
