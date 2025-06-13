@@ -38,11 +38,11 @@ NAME_OP_Asteroid_Alloys:0 "Alloy Fragment"
 
 # Game Rules
 game_rule_op_system_start:0 "OP Start System"
-game_rule_op_system_start_desc:0 "Allows you to select the 'Prosperity Prime' system as your starting system, which provides 4 additional large, highly habitable planets (size 16-18) all perfectly suited to your species. Each planet can be specialized using Stellaris 4.0's zone system for energy, mining, agriculture, or research as you see fit."
+game_rule_op_system_start_desc:0 "Allows you to select the 'Prosperity Prime' system as your starting system, which provides multiple specialized worlds: a large homeworld (size 25) with 2 specialized moons, a Paradise World (size 20) with farming moon, plus strategic resource planets for Volatile Motes and Exotic Gases. All colonizable planets have powerful specialization bonuses for Stellaris 4.0's zone system."
 
 # Notification Event
 opss.2.title:0 "OP Start System Mod Loaded"
-opss.2.desc:0 "You have successfully loaded the OP Start System mod. Your starting system 'Prosperity Prime' awaits with 4 additional large, perfectly habitable planets ready for colonization! Use the new zone system to specialize each world as you see fit."
+opss.2.desc:0 "You have successfully loaded the OP Start System mod. Your starting system 'Prosperity Prime' awaits with multiple specialized worlds: Energy Prime and Minerals Core moons around your homeworld, Paradise World with Farming Haven moon, plus strategic resource planets. Use the zone system to maximize their specialization bonuses!"
 opss.2.ok:0 "Excellent!"
 
 # Planet Modifiers
