@@ -46,3 +46,43 @@ A Stellaris mod that provides an overpowered starting system optimized for Stell
 ## Credits
 
 Created for the Stellaris modding community with assistance from AI
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+### What this means:
+- ✅ **Free to use** - Anyone can use this mod
+- ✅ **Free to modify** - Create your own versions or improvements
+- ✅ **Free to distribute** - Share with friends or the community
+- ✅ **Commercial use allowed** - Use in your own projects
+- ❌ **Only requirement** - Keep the original copyright notice
+
+## Contributing
+
+Contributions are welcome! Whether it's bug fixes, new features, or improvements to the documentation, feel free to:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes using [conventional commits](https://www.conventionalcommits.org/)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### Commit Format
+This project uses automated versioning based on conventional commits:
+```bash
+feat: add new feature      # Minor version bump
+fix: fix a bug            # Patch version bump  
+feat!: breaking change    # Major version bump
+docs: update docs         # No version bump
+```
+
+See [CONVENTIONAL_COMMITS.md](.github/CONVENTIONAL_COMMITS.md) for more examples.
+
+## Automated Releases
+
+This mod uses automated CI/CD with:
+- **Syntax checking** with CWTools
+- **Automatic versioning** from commit messages
+- **Steam Workshop publishing** on new releases
+- **Generated changelogs** from commit history
