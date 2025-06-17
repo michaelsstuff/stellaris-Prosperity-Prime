@@ -1,4 +1,4 @@
-version="1.0"
+version="1.0.0"
 tags={
 	"Galaxy Generation"
 	"Economy"
@@ -6,5 +6,5 @@ tags={
 }
 name="OP Start System - Prosperity Prime"
 picture="OP Start System - Prosperity Prime.jpg"
-supported_version="v4.0.20"
+supported_version="1.0.0"
 remote_file_id="3498954181"
