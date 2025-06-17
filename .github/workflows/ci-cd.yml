@@ -68,10 +68,8 @@ jobs:
       - name: Install semantic-release dependencies
         run: |
           npm install -g semantic-release
-          npm install -g @semantic-release/changelog
           npm install -g @semantic-release/git
           npm install -g @semantic-release/exec
-          npm install -g conventional-changelog-conventionalcommits
 
       - name: Create semantic-release config
         run: |
@@ -100,18 +98,6 @@ jobs:
                 }
               ],
               [
-                "@semantic-release/release-notes-generator",
-                {
-                  "preset": "conventionalcommits"
-                }
-              ],
-              [
-                "@semantic-release/changelog",
-                {
-                  "changelogFile": "CHANGELOG.md"
-                }
-              ],
-              [
                 "@semantic-release/exec",
                 {
                   "prepareCmd": "sed -i 's/version=\"[^\"]*\"/version=\"${nextRelease.version}\"/' descriptor.mod"
@@ -120,8 +106,8 @@ jobs:
               [
                 "@semantic-release/git",
                 {
-                  "assets": ["CHANGELOG.md", "descriptor.mod"],
-                  "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+                  "assets": ["descriptor.mod"],
+                  "message": "chore(release): ${nextRelease.version} [skip ci]"
                 }
               ],
               "@semantic-release/github"
