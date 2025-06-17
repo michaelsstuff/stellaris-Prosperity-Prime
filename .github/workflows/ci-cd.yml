@@ -224,13 +224,24 @@ jobs:
 
       - name: Publish to Steam Workshop using Docker
         run: |
+          echo "Starting Steam Workshop publish..."
+          echo "Using Steam username: ${{ secrets.STEAM_USERNAME }}"
+          echo "Workshop ID: ${{ secrets.STEAM_WORKSHOP_ID }}"
+          
           docker run --rm \
             -v "${{ github.workspace }}:/data" \
             -w /data \
             steamcmd/steamcmd:latest \
             +login "${{ secrets.STEAM_USERNAME }}" "${{ secrets.STEAM_PASSWORD }}" \
             +workshop_build_item "/data/steam_build/workshop_item.vdf" \
-            +quit
+            +quit || {
+              echo "Steam authentication failed. Please check:"
+              echo "1. STEAM_USERNAME and STEAM_PASSWORD secrets are set correctly"
+              echo "2. Steam account doesn't have Steam Guard enabled"
+              echo "3. Steam account owns Stellaris"
+              echo "4. Workshop ID (${{ secrets.STEAM_WORKSHOP_ID }}) is correct"
+              exit 1
+            }
 
   # Legacy job for manual releases (keeping for backward compatibility)
   publish-to-steam-manual:
@@ -315,13 +326,24 @@ jobs:
           EOF
           
           # Run SteamCMD in Docker container
+          echo "Starting Steam Workshop publish..."
+          echo "Using Steam username: ${{ secrets.STEAM_USERNAME }}"
+          echo "Workshop ID: ${{ secrets.STEAM_WORKSHOP_ID }}"
+          
           docker run --rm \
             -v "${{ github.workspace }}:/data" \
             -w /data \
             steamcmd/steamcmd:latest \
             +login "${{ secrets.STEAM_USERNAME }}" "${{ secrets.STEAM_PASSWORD }}" \
             +workshop_build_item "/data/steam_build/workshop_item.vdf" \
-            +quit
+            +quit || {
+              echo "Steam authentication failed. Please check:"
+              echo "1. STEAM_USERNAME and STEAM_PASSWORD secrets are set correctly"
+              echo "2. Steam account doesn't have Steam Guard enabled"
+              echo "3. Steam account owns Stellaris"
+              echo "4. Workshop ID (${{ secrets.STEAM_WORKSHOP_ID }}) is correct"
+              exit 1
+            }
 
       - name: Update descriptor.mod version
         run: |
