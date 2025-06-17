@@ -139,9 +139,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [syntax-check, semantic-release]
     if: needs.semantic-release.outputs.new-release-published == 'true'
-    environment: 
-      name: steam-workshop
-      url: https://steamcommunity.com/sharedfiles/filedetails/?id=${{ secrets.STEAM_WORKSHOP_ID }}
+    environment: steam-workshop
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -252,9 +250,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: syntax-check
     if: github.event_name == 'release' && github.event.action == 'published'
-    environment:
-      name: steam-workshop
-      url: https://steamcommunity.com/sharedfiles/filedetails/?id=${{ secrets.STEAM_WORKSHOP_ID }}
+    environment: steam-workshop
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
