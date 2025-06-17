@@ -1,0 +1,349 @@
+name: CI/CD - Syntax Check, Auto-Tag & Steam Workshop Publish
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  release:
+    types: [published]
+
+jobs:
+  syntax-check:
+    name: CWTools Syntax Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run CWTools syntax check
+        uses: cwtools/cwtools-action@v1.1.0
+        with:
+          game: stellaris
+          locLanguages: "english german"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload CWTools output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cwtools-output
+          path: output.json
+
+  semantic-release:
+    name: Semantic Release & Auto-Tag
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    outputs:
+      new-release-published: ${{ steps.semantic.outputs.new-release-published }}
+      new-release-version: ${{ steps.semantic.outputs.new-release-version }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install semantic-release dependencies
+        run: |
+          npm install -g semantic-release
+          npm install -g @semantic-release/changelog
+          npm install -g @semantic-release/git
+          npm install -g @semantic-release/exec
+          npm install -g conventional-changelog-conventionalcommits
+
+      - name: Create semantic-release config
+        run: |
+          cat > .releaserc.json << 'EOF'
+          {
+            "branches": ["main", "master"],
+            "plugins": [
+              [
+                "@semantic-release/commit-analyzer",
+                {
+                  "preset": "conventionalcommits",
+                  "releaseRules": [
+                    {"type": "feat", "release": "minor"},
+                    {"type": "fix", "release": "patch"},
+                    {"type": "perf", "release": "patch"},
+                    {"type": "revert", "release": "patch"},
+                    {"type": "docs", "release": false},
+                    {"type": "style", "release": false},
+                    {"type": "chore", "release": false},
+                    {"type": "refactor", "release": "patch"},
+                    {"type": "test", "release": false},
+                    {"type": "build", "release": false},
+                    {"type": "ci", "release": false},
+                    {"breaking": true, "release": "major"}
+                  ]
+                }
+              ],
+              [
+                "@semantic-release/release-notes-generator",
+                {
+                  "preset": "conventionalcommits"
+                }
+              ],
+              [
+                "@semantic-release/changelog",
+                {
+                  "changelogFile": "CHANGELOG.md"
+                }
+              ],
+              [
+                "@semantic-release/exec",
+                {
+                  "prepareCmd": "sed -i 's/version=\"[^\"]*\"/version=\"${nextRelease.version}\"/' descriptor.mod"
+                }
+              ],
+              [
+                "@semantic-release/git",
+                {
+                  "assets": ["CHANGELOG.md", "descriptor.mod"],
+                  "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+                }
+              ],
+              "@semantic-release/github"
+            ]
+          }
+          EOF
+
+      - name: Run semantic-release
+        id: semantic
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npx semantic-release
+  publish-to-steam:
+    name: Publish to Steam Workshop
+    runs-on: ubuntu-latest
+    needs: [syntax-check, semantic-release]
+    if: needs.semantic-release.outputs.new-release-published == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: main  # Get the updated version from semantic-release
+
+      - name: Setup SteamCMD
+        uses: CyberAndrii/setup-steamcmd@v1
+
+      - name: Create Steam Workshop VDF
+        run: |
+          mkdir -p steam_build
+          cat > steam_build/workshop_item.vdf << 'EOF'
+          "workshopitem"
+          {
+            "appid" "281990"
+            "publishedfileid" "${{ secrets.STEAM_WORKSHOP_ID }}"
+            "contentfolder" "${{ github.workspace }}"
+            "previewfile" "${{ github.workspace }}/OP Start System - Prosperity Prime.jpg"
+            "visibility" "0"
+            "title" "OP Start System - Prosperity Prime"
+            "description" "[h1]OP Start System - Prosperity Prime v${{ needs.semantic-release.outputs.new-release-version }}[/h1]
+
+          A Stellaris mod that provides an overpowered starting system optimized for Stellaris 4.0 Phoenix Update's new zone specialization system.
+
+          [h2]System Overview[/h2]
+
+          [h3]The 'Prosperity Prime' System[/h3]
+          [list]
+          [*][b]Large Homeworld[/b]: 'New Eden' (Size 25) - Your main starting planet
+          [*][b]Energy Prime[/b] (Size 12) - Energy production specialist moon
+          [*][b]Minerals Core[/b] (Size 12) - Mining specialist moon
+          [*][b]Paradise World[/b] (Size 20) - Research-focused planet
+          [*][b]Farming Haven[/b] (Size 12) - Agricultural specialist moon
+          [*][b]Strategic Resource Planets[/b]: Molten Forge, Gas Harvester, Barren Rock
+          [*][b]Resource Asteroid Belt[/b] - 4 asteroids with minerals and energy deposits
+          [/list]
+
+          [h3]Phoenix 4.0 Features[/h3]
+          [list]
+          [*][b]Zone System Optimized[/b]: All planets have specialized bonuses that work with district specialization
+          [*][b]Perfect Habitability[/b]: All colonizable planets use ideal_planet_class for 100% habitability
+          [*][b]Strategic Resources from Day 1[/b]: Immediate access to advanced resources
+          [*][b]Smart Specialization[/b]: Built-in modifiers encourage proper zone usage
+          [/list]
+
+          [h2]Why This Is Overpowered[/h2]
+          [list]
+          [*][b]No Travel Time[/b]: All colonies are in your home system for instant expansion
+          [*][b]Perfect Planets[/b]: 5 colonizable worlds with specialized bonuses
+          [*][b]Strategic Resources[/b]: Access to Volatile Motes and Exotic Gases from game start
+          [*][b]Economic Powerhouse[/b]: Multiple specialized worlds enable explosive early growth
+          [*][b]No Exploration Needed[/b]: You know exactly where your next colonies will be
+          [/list]
+
+          [h2]Usage[/h2]
+          [olist]
+          [*]Subscribe to this mod
+          [*]Enable 'OP Start System' in the mod launcher
+          [*]When starting a new game, enable the 'Prosperity Prime System' option in game rules
+          [*]Select this system during empire creation
+          [/olist]
+
+          [h2]Compatibility[/h2]
+          [list]
+          [*]Created for Stellaris v4.0+ (Phoenix Update)
+          [*]Compatible with the new district and zone system
+          [*]Should work with most other mods
+          [/list]
+
+          [h2]Version[/h2]
+          Version: v${{ needs.semantic-release.outputs.new-release-version }}
+          Auto-generated from conventional commits
+
+          [h2]Source Code & Updates[/h2]
+          [list]
+          [*]GitHub Repository: ${{ github.server_url }}/${{ github.repository }}
+          [*]Changelog: ${{ github.server_url }}/${{ github.repository }}/blob/main/CHANGELOG.md
+          [*]Latest Release: ${{ github.server_url }}/${{ github.repository }}/releases/latest
+          [/list]
+          "
+            "changenote" "Auto-release v${{ needs.semantic-release.outputs.new-release-version }}: Generated from conventional commits. See GitHub for detailed changelog."
+          }
+          EOF
+
+      - name: Publish to Steam Workshop
+        run: |
+          steamcmd +login "${{ secrets.STEAM_USERNAME }}" "${{ secrets.STEAM_PASSWORD }}" +workshop_build_item "${{ github.workspace }}/steam_build/workshop_item.vdf" +quit
+        env:
+          STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
+          STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
+
+      - name: Upload build logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: steam-build-logs
+          path: |
+            ~/.steam/logs/
+            ~/.steam/workshopbuilds/
+
+  # Legacy job for manual releases (keeping for backward compatibility)
+  publish-to-steam-manual:
+    name: Publish to Steam Workshop (Manual Release)
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    if: github.event_name == 'release' && github.event.action == 'published'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SteamCMD
+        uses: CyberAndrii/setup-steamcmd@v1
+
+      - name: Create Steam Workshop VDF
+        run: |
+          mkdir -p steam_build
+          cat > steam_build/workshop_item.vdf << 'EOF'
+          "workshopitem"          {
+            "appid" "281990"
+            "publishedfileid" "${{ secrets.STEAM_WORKSHOP_ID }}"
+            "contentfolder" "${{ github.workspace }}"
+            "previewfile" "${{ github.workspace }}/OP Start System - Prosperity Prime.jpg"
+            "visibility" "0"
+            "title" "OP Start System - Prosperity Prime"
+            "description" "[h1]OP Start System - Prosperity Prime[/h1]
+
+          A Stellaris mod that provides an overpowered starting system optimized for Stellaris 4.0 Phoenix Update's new zone specialization system.
+
+          [h2]System Overview[/h2]
+
+          [h3]The 'Prosperity Prime' System[/h3]
+          [list]
+          [*][b]Large Homeworld[/b]: 'New Eden' (Size 25) - Your main starting planet
+          [*][b]Energy Prime[/b] (Size 12) - Energy production specialist moon
+          [*][b]Minerals Core[/b] (Size 12) - Mining specialist moon
+          [*][b]Paradise World[/b] (Size 20) - Research-focused planet
+          [*][b]Farming Haven[/b] (Size 12) - Agricultural specialist moon
+          [*][b]Strategic Resource Planets[/b]: Molten Forge, Gas Harvester, Barren Rock
+          [*][b]Resource Asteroid Belt[/b] - 4 asteroids with minerals and energy deposits
+          [/list]
+
+          [h3]Phoenix 4.0 Features[/h3]
+          [list]
+          [*][b]Zone System Optimized[/b]: All planets have specialized bonuses that work with district specialization
+          [*][b]Perfect Habitability[/b]: All colonizable planets use ideal_planet_class for 100% habitability
+          [*][b]Strategic Resources from Day 1[/b]: Immediate access to advanced resources
+          [*][b]Smart Specialization[/b]: Built-in modifiers encourage proper zone usage
+          [/list]
+
+          [h2]Why This Is Overpowered[/h2]
+          [list]
+          [*][b]No Travel Time[/b]: All colonies are in your home system for instant expansion
+          [*][b]Perfect Planets[/b]: 5 colonizable worlds with specialized bonuses
+          [*][b]Strategic Resources[/b]: Access to Volatile Motes and Exotic Gases from game start
+          [*][b]Economic Powerhouse[/b]: Multiple specialized worlds enable explosive early growth
+          [*][b]No Exploration Needed[/b]: You know exactly where your next colonies will be
+          [/list]
+
+          [h2]Usage[/h2]
+          [olist]
+          [*]Subscribe to this mod
+          [*]Enable 'OP Start System' in the mod launcher
+          [*]When starting a new game, enable the 'Prosperity Prime System' option in game rules
+          [*]Select this system during empire creation
+          [/olist]
+
+          [h2]Compatibility[/h2]
+          [list]
+          [*]Created for Stellaris v4.0+ (Phoenix Update)
+          [*]Compatible with the new district and zone system
+          [*]Should work with most other mods
+          [/list]
+
+          [h2]Version[/h2]
+          Version: ${{ github.event.release.tag_name }}
+          Built from: ${{ github.sha }}
+
+          [h2]Source Code[/h2]
+          Available on GitHub: ${{ github.server_url }}/${{ github.repository }}
+          "
+            "changenote" "Manual release ${{ github.event.release.tag_name }}: ${{ github.event.release.name }}"
+          }
+          EOF
+
+      - name: Publish to Steam Workshop
+        run: |
+          steamcmd +login "${{ secrets.STEAM_USERNAME }}" "${{ secrets.STEAM_PASSWORD }}" +workshop_build_item "${{ github.workspace }}/steam_build/workshop_item.vdf" +quit
+        env:
+          STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
+          STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
+
+      - name: Upload build logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: steam-build-logs-manual
+          path: |
+            ~/.steam/logs/
+            ~/.steam/workshopbuilds/
+
+      - name: Update descriptor.mod version
+        run: |
+          # Extract version from tag (remove 'v' prefix if present)
+          VERSION="${{ github.event.release.tag_name }}"
+          VERSION="${VERSION#v}"
+          
+          # Update version in descriptor.mod
+          sed -i "s/version=\"[^\"]*\"/version=\"$VERSION\"/" descriptor.mod
+          
+          # Show the change
+          echo "Updated descriptor.mod:"
+          cat descriptor.mod
+
+      - name: Commit version update
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add descriptor.mod
+          git commit -m "Auto-update version to ${{ github.event.release.tag_name }}" || exit 0
+          git push
