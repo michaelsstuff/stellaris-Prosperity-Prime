@@ -223,26 +223,66 @@ jobs:
           }
           EOF
 
+      - name: Debug Steam Login Issues
+        run: |
+          echo "=== Steam Login Debug Information ==="
+          echo "Runner IP and Location:"
+          curl -s https://httpbin.org/ip | jq -r '.origin' || echo "Could not get IP"
+          curl -s https://ipinfo.io/json | jq -r '.ip, .city, .region, .country' || echo "Could not get location"
+          
+          echo "=== Testing Steam Connection ==="
+          # Test if we can reach Steam servers
+          ping -c 3 steampowered.com || echo "Could not ping Steam servers"
+          
+          echo "=== Checking SteamCMD Basic Functionality ==="
+          docker run --rm \
+            -v "${{ github.workspace }}:/data" \
+            steamcmd/steamcmd:latest \
+            +help || echo "SteamCMD help command failed"
+
       - name: Publish to Steam Workshop using Docker
         run: |
           echo "Starting Steam Workshop publish..."
           echo "Using Steam username: ${{ secrets.STEAM_USERNAME }}"
           echo "Workshop ID: ${{ secrets.STEAM_WORKSHOP_ID }}"
+          echo "GitHub Actions Runner IP info:"
+          curl -s https://httpbin.org/ip || echo "Could not get IP info"
           
-          docker run --rm \
-            -v "${{ github.workspace }}:/data" \
-            -w /data \
-            steamcmd/steamcmd:latest \
-            +login "${{ secrets.STEAM_USERNAME }}" "${{ secrets.STEAM_PASSWORD }}" \
-            +workshop_build_item "/data/steam_build/workshop_item.vdf" \
-            +quit || {
-              echo "Steam authentication failed. Please check:"
-              echo "1. STEAM_USERNAME and STEAM_PASSWORD secrets are set correctly"
-              echo "2. Steam account doesn't have Steam Guard enabled"
-              echo "3. Steam account owns Stellaris"
-              echo "4. Workshop ID (${{ secrets.STEAM_WORKSHOP_ID }}) is correct"
-              exit 1
-            }
+          # Create log directory for debugging
+          mkdir -p steam_logs
+          
+          # Retry logic for Steam login issues
+          for attempt in 1 2 3; do
+            echo "Login attempt $attempt of 3..."
+            
+            if docker run --rm \
+              -v "${{ github.workspace }}:/data" \
+              -w /data \
+              steamcmd/steamcmd:latest \
+              +@ShutdownOnFailedCommand 1 \
+              +@NoPromptForPassword 1 \
+              +login "${{ secrets.STEAM_USERNAME }}" "${{ secrets.STEAM_PASSWORD }}" \
+              +workshop_build_item "/data/steam_build/workshop_item.vdf" \
+              +quit; then
+              echo "Steam Workshop publish successful!"
+              exit 0
+            else
+              echo "Attempt $attempt failed. Steam login error."
+              if [ $attempt -lt 3 ]; then
+                echo "Waiting 30 seconds before retry..."
+                sleep 30
+              fi
+            fi
+          done
+          
+          echo "All login attempts failed. This is commonly caused by:"
+          echo "1. Steam blocking logins from GitHub Actions datacenter IPs"
+          echo "2. Steam rate limiting automated login attempts"
+          echo "3. Account security restrictions requiring manual verification"
+          echo "4. Steam Guard still being enabled (can take 15 days to fully disable)"
+          echo ""
+          echo "Consider using self-hosted runners or Steam's official publishing tools."
+          exit 1
 
   # Legacy job for manual releases (keeping for backward compatibility)
   publish-to-steam-manual:
