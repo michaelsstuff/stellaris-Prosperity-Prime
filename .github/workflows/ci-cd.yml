@@ -101,7 +101,7 @@ jobs:
               [
                 "@semantic-release/exec",
                 {
-                  "prepareCmd": "sed -i 's/version=\"[^\"]*\"/version=\"${nextRelease.version}\"/' descriptor.mod"
+                  "prepareCmd": "sed -i '1s/version=\"[^\"]*\"/version=\"${nextRelease.version}\"/' descriptor.mod"
                 }
               ],
               [
