@@ -223,23 +223,6 @@ jobs:
           }
           EOF
 
-      - name: Debug Steam Login Issues
-        run: |
-          echo "=== Steam Login Debug Information ==="
-          echo "Runner IP and Location:"
-          curl -s https://httpbin.org/ip | jq -r '.origin' || echo "Could not get IP"
-          curl -s https://ipinfo.io/json | jq -r '.ip, .city, .region, .country' || echo "Could not get location"
-          
-          echo "=== Testing Steam Connection ==="
-          # Test if we can reach Steam servers
-          ping -c 3 steampowered.com || echo "Could not ping Steam servers"
-          
-          echo "=== Checking SteamCMD Basic Functionality ==="
-          docker run --rm \
-            -v "${{ github.workspace }}:/data" \
-            steamcmd/steamcmd:latest \
-            +help || echo "SteamCMD help command failed"
-
       - name: Publish to Steam Workshop using Docker
         run: |
           echo "Starting Steam Workshop publish..."
