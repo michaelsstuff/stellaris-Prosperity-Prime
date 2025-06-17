@@ -145,19 +145,17 @@ jobs:
         with:
           ref: main  # Get the updated version from semantic-release
 
-      - name: Setup SteamCMD
-        uses: CyberAndrii/setup-steamcmd@v1
-
-      - name: Create Steam Workshop VDF
+      - name: Publish to Steam Workshop
         run: |
+          # Create Steam Workshop VDF
           mkdir -p steam_build
           cat > steam_build/workshop_item.vdf << 'EOF'
           "workshopitem"
           {
             "appid" "281990"
             "publishedfileid" "${{ secrets.STEAM_WORKSHOP_ID }}"
-            "contentfolder" "${{ github.workspace }}"
-            "previewfile" "${{ github.workspace }}/OP Start System - Prosperity Prime.jpg"
+            "contentfolder" "/data"
+            "previewfile" "/data/OP Start System - Prosperity Prime.jpg"
             "visibility" "0"
             "title" "OP Start System - Prosperity Prime"
             "description" "[h1]OP Start System - Prosperity Prime v${{ needs.semantic-release.outputs.new-release-version }}[/h1]
@@ -224,21 +222,15 @@ jobs:
           }
           EOF
 
-      - name: Publish to Steam Workshop
+      - name: Publish to Steam Workshop using Docker
         run: |
-          steamcmd +login "${{ secrets.STEAM_USERNAME }}" "${{ secrets.STEAM_PASSWORD }}" +workshop_build_item "${{ github.workspace }}/steam_build/workshop_item.vdf" +quit
-        env:
-          STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
-          STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
-
-      - name: Upload build logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: steam-build-logs
-          path: |
-            ~/.steam/logs/
-            ~/.steam/workshopbuilds/
+          docker run --rm \
+            -v "${{ github.workspace }}:/data" \
+            -w /data \
+            steamcmd/steamcmd:latest \
+            +login "${{ secrets.STEAM_USERNAME }}" "${{ secrets.STEAM_PASSWORD }}" \
+            +workshop_build_item "/data/steam_build/workshop_item.vdf" \
+            +quit
 
   # Legacy job for manual releases (keeping for backward compatibility)
   publish-to-steam-manual:
@@ -250,18 +242,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup SteamCMD
-        uses: CyberAndrii/setup-steamcmd@v1
-
-      - name: Create Steam Workshop VDF
+      - name: Publish to Steam Workshop using Docker
         run: |
+          # Create Steam Workshop VDF
           mkdir -p steam_build
           cat > steam_build/workshop_item.vdf << 'EOF'
           "workshopitem"          {
             "appid" "281990"
             "publishedfileid" "${{ secrets.STEAM_WORKSHOP_ID }}"
-            "contentfolder" "${{ github.workspace }}"
-            "previewfile" "${{ github.workspace }}/OP Start System - Prosperity Prime.jpg"
+            "contentfolder" "/data"
+            "previewfile" "/data/OP Start System - Prosperity Prime.jpg"
             "visibility" "0"
             "title" "OP Start System - Prosperity Prime"
             "description" "[h1]OP Start System - Prosperity Prime[/h1]
@@ -323,22 +313,15 @@ jobs:
             "changenote" "Manual release ${{ github.event.release.tag_name }}: ${{ github.event.release.name }}"
           }
           EOF
-
-      - name: Publish to Steam Workshop
-        run: |
-          steamcmd +login "${{ secrets.STEAM_USERNAME }}" "${{ secrets.STEAM_PASSWORD }}" +workshop_build_item "${{ github.workspace }}/steam_build/workshop_item.vdf" +quit
-        env:
-          STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
-          STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
-
-      - name: Upload build logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: steam-build-logs-manual
-          path: |
-            ~/.steam/logs/
-            ~/.steam/workshopbuilds/
+          
+          # Run SteamCMD in Docker container
+          docker run --rm \
+            -v "${{ github.workspace }}:/data" \
+            -w /data \
+            steamcmd/steamcmd:latest \
+            +login "${{ secrets.STEAM_USERNAME }}" "${{ secrets.STEAM_PASSWORD }}" \
+            +workshop_build_item "/data/steam_build/workshop_item.vdf" \
+            +quit
 
       - name: Update descriptor.mod version
         run: |
