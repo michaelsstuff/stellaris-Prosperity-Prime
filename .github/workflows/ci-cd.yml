@@ -70,6 +70,7 @@ jobs:
           npm install -g semantic-release
           npm install -g @semantic-release/git
           npm install -g @semantic-release/exec
+          npm install -g conventional-changelog-conventionalcommits
 
       - name: Create semantic-release config
         run: |
